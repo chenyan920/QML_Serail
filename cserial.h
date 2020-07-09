@@ -12,8 +12,10 @@ public:
     explicit ASerial();
     ~ASerial();
 
-    void printInfo();
-    void initPort();
+public:
+    Q_INVOKABLE void printInfo();
+    Q_INVOKABLE void initPort();
+    Q_INVOKABLE void sendData(QString text);
 
 private:
     QSerialPort *serialPort;

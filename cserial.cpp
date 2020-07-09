@@ -4,11 +4,11 @@
 #include <QSerialPortInfo>
 
 ASerial::ASerial(){
-   connect(serialPort,SIGNAL(readyRead()),this,SLOT(receiveData()));
    initPort();
 
    serialPort->setPortName("COM5");//暂时直接打开已知串口，待进一步完善UI功能。
    serialPort->open(QIODevice::ReadWrite);
+   connect(serialPort,SIGNAL(readyRead()),this,SLOT(receiveData()));
 }
 
 ASerial::~ASerial(){ //析构时应该释放
@@ -31,4 +31,9 @@ void ASerial::initPort(){
 void ASerial::receiveData(){
     QByteArray info = serialPort->readAll();
     emit readyReceive(QString(info));//发射UI层可识别信号
+}
+
+void ASerial::sendData(QString text){
+    QByteArray array=text.toLatin1();
+    serialPort->write(array);
 }
