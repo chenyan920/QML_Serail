@@ -4,36 +4,51 @@
 #include <QSerialPortInfo>
 
 ASerial::ASerial(){
-   initPort();
+    initPort();
 
-   serialPort->setPortName("COM5");//暂时直接打开已知串口，待进一步完善UI功能。
-   serialPort->open(QIODevice::ReadWrite);
-   connect(serialPort,SIGNAL(readyRead()),this,SLOT(receiveData()));
+    connect(sp,SIGNAL(readyRead()),this,SLOT(receiveData()));
 }
 
+
 ASerial::~ASerial(){ //析构时应该释放
-    if(!serialPort->isOpen())
-        serialPort->close();
-    delete serialPort;
+    if(!sp->isOpen())
+        sp->close();
+    delete sp;
 }
 
 void ASerial::printInfo(){
     qDebug()<<"hello world";
 }
 
+bool ASerial::connectPort(QString text){
+    sp->setPortName(text);//暂时直接打开已知串口，待进一步完善UI功能。
+    bool result = sp->open(QIODevice::ReadWrite);
+    return result;
+}
+
 void ASerial::initPort(){
-    serialPort->setParity(QSerialPort::NoParity);
-    serialPort->setDataBits(QSerialPort::Data8);
-    serialPort->setStopBits(QSerialPort::OneStop);
-    serialPort->setBaudRate(QSerialPort::Baud9600);
+    sp->setParity(QSerialPort::NoParity);
+    sp->setDataBits(QSerialPort::Data8);
+    sp->setStopBits(QSerialPort::OneStop);
+    sp->setBaudRate(QSerialPort::Baud9600);
 }
 
 void ASerial::receiveData(){
-    QByteArray info = serialPort->readAll();
+    QByteArray info = sp->readAll();
     emit readyReceive(QString(info));//发射UI层可识别信号
 }
 
 void ASerial::sendData(QString text){
     QByteArray array=text.toLatin1();
-    serialPort->write(array);
+    sp->write(array);
+}
+
+QStringList ASerial::getSerialName(){
+    QStringList m_serialPortName;
+    foreach(const QSerialPortInfo &info,QSerialPortInfo::availablePorts())
+    {
+        m_serialPortName << info.portName();
+        qDebug()<<"serialPortName:"<<info.portName();
+    }
+    return m_serialPortName;
 }

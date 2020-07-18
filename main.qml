@@ -1,22 +1,28 @@
-import QtQuick 2.9
+import QtQuick 2.12
+import QtQuick.Controls 1.4
+import QtQuick.Layouts 1.1
 import QtQuick.Window 2.2
 
-Window {
-    visible: true
-    width: 640
+ApplicationWindow {
+    id:rootwin
     height: 480
-    title: qsTr("Hello World")
+    width: 640
+    title: qsTr("串口小助手")
+    visible: true
+    CMenuBar{id:myMenuBar}
     Rectangle{
-        id:root
         anchors.fill: parent
-        Component.onCompleted: {
-            root.enabled = true
-            root.forceActiveFocus()
-        }
-        Keys.onPressed:{
+        enabled: true
+        focus: true
+        Keys.onPressed: {
             switch(event.key){
-            case Qt.Key_1:serial.sendData('1')
+            case Qt.Key_1: console.log(1);serial.sendData('a');break
+            case Qt.Key_2: console.log(2);serial.sendData('b');break
+            default:break;
             }
         }
     }
+    menuBar: myMenuBar.menuBar
 }
+
+

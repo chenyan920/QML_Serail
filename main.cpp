@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
 
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
-    ASerial *aSerial = new ASerial;
+    ASerial *aSerial = new ASerial ;
     engine.rootContext()->setContextProperty("serial",aSerial);
 
     engine.load(QUrl("qrc:/main.qml"));

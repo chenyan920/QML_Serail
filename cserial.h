@@ -15,10 +15,13 @@ public:
 public:
     Q_INVOKABLE void printInfo();
     Q_INVOKABLE void initPort();
+
     Q_INVOKABLE void sendData(QString text);
+    Q_INVOKABLE bool connectPort(QString text);
+    Q_INVOKABLE QStringList getSerialName();
 
 private:
-    QSerialPort *serialPort;
+     QSerialPort *sp = new QSerialPort;
 
 private slots:
     void receiveData();
